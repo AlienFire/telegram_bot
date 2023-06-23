@@ -1,3 +1,5 @@
-from core.config import settings
+from aiogram import executor
+from bot import bot
 
-a = 1
+if __name__ == '__main__':
+    executor.start_polling(bot.dp, skip_updates=True)
