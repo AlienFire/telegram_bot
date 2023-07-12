@@ -1,5 +1,6 @@
 
 import logging
+
 from aiogram import Bot, Dispatcher, executor, types
 
 from app.core.config import settings

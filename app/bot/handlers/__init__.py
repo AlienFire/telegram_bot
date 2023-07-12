@@ -1,7 +1,9 @@
 
 from aiogram import Dispatcher
-from .base import setup_handlers
+from .base import setup_handlers as setup_base_handlers
+from .weather import setup_handlers as setup_weather_handlers
 
 
 def init_handlers(dp:Dispatcher):
-    setup_handlers(dp=dp)
+    setup_base_handlers(dp=dp)
+    setup_weather_handlers(dp=dp)
