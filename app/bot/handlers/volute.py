@@ -6,7 +6,8 @@ async def get_volute(message: types.Message):
     *_, volute_data = message.text.split()
 
     exchange_rate = VoluteClient(volute_data=volute_data.upper())
-    await message.reply(await exchange_rate.get_value())
+    current_exchange_rate = await exchange_rate.actual_course()
+    await message.reply(current_exchange_rate.to_string())
 
 
 def setup_handlers(dp: Dispatcher):

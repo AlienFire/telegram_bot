@@ -4,6 +4,7 @@ from aiohttp import ClientSession
 
 from app.core.config import settings
 
+from app.domane.entity.volute import CurrentExchangeRate
 
 class VoluteClientInterface(ABC):
     @abstractmethod
@@ -22,16 +23,21 @@ class VoluteClient(VoluteClientInterface):
         """
         self._volute_data = volute_data
 
-    async def actual_course(self):
+    async def actual_course(self) -> CurrentExchangeRate | None:
         """Возвращает курс валюты"""
         return await self._get_volute()
 
-    async def _get_volute(self):
+    async def _get_volute(self) -> CurrentExchangeRate | None:
         """Возвращает курс доллара"""
         volute_data = await self._request_volute()
-        if volute_collection := volute_data.get('Valute'):
+
+        if volute_collection := volute_data.get('Valute', None):
             if request_volute := volute_collection.get(self._volute_data):
-                return request_volute.get('Value')
+                return CurrentExchangeRate(
+                    volute_name= request_volute.get("CharCode"),
+                    value=str(request_volute.get("Value")),
+                    date=volute_data.get("Date")
+                )
 
     async def _request_volute(self) -> dict:
         """метод для запроса всей информации в json"""
